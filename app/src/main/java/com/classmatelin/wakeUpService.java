@@ -19,6 +19,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
@@ -39,6 +40,9 @@ public class wakeUpService extends Service {
     // 语音唤醒对象
     private VoiceWakeuper mIvw;
     private int curThresh=1000;
+
+    //广播发送器
+    private LocalBroadcastManager localBroadcastManager;
 
     public wakeUpService() {
     }
@@ -84,20 +88,26 @@ public class wakeUpService extends Service {
 
         @Override
         public void onResult(WakeuperResult result) {
-            PackageManager packageManager=wakeUpService.this.getPackageManager();
+            //PackageManager packageManager=wakeUpService.this.getPackageManager();
 
             try{
 //                String pName=getPackageName();
 //                Intent intent=packageManager.getLaunchIntentForPackage(pName);
 //                startActivity(intent);
-                Intent intent=new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:"+"13531532683"));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-//                Intent intent=new Intent(wakeUpService.this,MainActivity.class);
+                  //测试：打电话给lmw
+//                Intent intent=new Intent(Intent.ACTION_DIAL);
+//                intent.setData(Uri.parse("tel:"+"13531532683"));
 //                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                startActivity(intent);
-                Toast.makeText(wakeUpService.this,"启动了",Toast.LENGTH_SHORT).show();
+
+                //2022.03.12：能打开应用，但是只能在点开应用后一段时间内，过了则会只接受信号不进行动作，猜测是安卓系统对App生命周期管理之类照成的，待查。
+                Intent intent=new Intent(wakeUpService.this,MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+//                Intent intent=new Intent(myApplication.wakeUpName);
+//                sendBroadcast(intent);
+
+                Toast.makeText(wakeUpService.this,myApplication.wakeUpName,Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Toast.makeText(wakeUpService.this,"启动未成功，但确实是识别到了",Toast.LENGTH_SHORT).show();
             }

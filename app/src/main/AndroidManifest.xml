@@ -6,13 +6,13 @@
     <uses-permission
         android:name="android.permission.INJECT_EVENTS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-
     <application
+        android:name=".myApplication"
         android:allowBackup="true"
         android:extractNativeLibs="true"
         android:icon="@drawable/img"
@@ -20,15 +20,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Classmatelin">
+        <activity
+            android:name=".UserActivity"
+            android:exported="true" />
+        <activity
+            android:name=".MainActivity2"
+            android:exported="true" />
+
         <service
             android:name=".wakeUpService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTask"
             android:theme="@style/Theme.MyDialog">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

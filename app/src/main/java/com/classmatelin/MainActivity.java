@@ -3,6 +3,7 @@ package com.classmatelin;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -40,7 +41,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
     //联系人信息
     public class ContactInfo {
         private String name;
@@ -57,7 +59,8 @@ public class MainActivity extends AppCompatActivity{
     public static final String TAG = MainActivity.class.getSimpleName();
 
     protected TextView txtResult;//识别结果
-    protected FloatingActionButton microphone;//语音按钮
+    protected FloatingActionButton microphone;  //语音按钮
+    protected FloatingActionButton toMain;  //主界面按钮
 
     private String res;//语音识别结果
     private String msg_number;//短信联系人电话
@@ -103,6 +106,21 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.microphone:
+                txtResult = (TextView) findViewById(R.id.tv_txt);
+                asr.send(SpeechConstant.ASR_START, "{}", null, 0, 0);
+                break;
+            case R.id.Main:
+                Intent intent=new Intent(MainActivity.this,MainActivity2.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+    }
 
     //判断服务是否运行（确保每次只调用一次startCommand()）
     private boolean isServiceRunning(final String className){
@@ -123,16 +141,12 @@ public class MainActivity extends AppCompatActivity{
      */
     private void initView() {
         //获取按钮
-        txtResult = (TextView) findViewById(R.id.tv_txt);
-        microphone = (FloatingActionButton) findViewById(R.id.microphone);
+        toMain=(FloatingActionButton)findViewById(R.id.Main);
+        microphone = (FloatingActionButton) findViewById(R.id.microphone);  //中间麦克风
 
         //设置点击事件
-        microphone.setOnClickListener(new View.OnClickListener() {//开始
-            @Override
-            public void onClick(View v) {
-                asr.send(SpeechConstant.ASR_START, "{}", null, 0, 0);
-            }
-        });
+        toMain.setOnClickListener(this);
+        microphone.setOnClickListener(this);
     }
 
     /**

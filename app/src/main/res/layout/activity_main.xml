@@ -22,7 +22,7 @@
         tools:layout_editor_absoluteY="506dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/setting"
+        android:id="@+id/Main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
