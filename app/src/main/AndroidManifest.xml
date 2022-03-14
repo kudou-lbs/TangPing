@@ -20,6 +20,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Classmatelin">
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/shape_circle" />
+
+        <activity
+            android:name=".FanActivity"
+            android:exported="true" />
         <activity
             android:name=".UserActivity"
             android:exported="true" />

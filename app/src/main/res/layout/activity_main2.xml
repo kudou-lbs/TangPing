@@ -55,11 +55,161 @@
     </LinearLayout>
 
     <!--数据与按钮-->
+    <!--温湿度-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <customize.dataView
+            android:id="@+id/outsizeTemperature"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:data_name="室外温度"
+            app:data_data="20°C"/>
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/divide"/>
+        <customize.dataView
+            android:id="@+id/outsizeHumidity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:data_name="室外湿度"
+            app:data_data="50%"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <customize.dataView
+            android:id="@+id/indoorTemperature"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:data_name="室外温度"
+            app:data_data="20°C"/>
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/divide"/>
+        <customize.dataView
+            android:id="@+id/indoorHumidity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:data_name="室外湿度"
+            app:data_data="50%"/>
+    </LinearLayout>
+    <!--大灯-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_height="match_parent"
+            android:layout_width="50dp"
+            android:src="@drawable/light"
+            android:layout_gravity="center_vertical"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="13dp"
+            android:text="大灯"
+            android:textSize="24dp"/>
+        <ImageView
+            android:id="@+id/light_switch"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/switch_off"/>
 
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divide"/>
+    <!--台灯-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_height="match_parent"
+            android:layout_width="50dp"
+            android:src="@drawable/desk_lamp"
+            android:layout_gravity="center_vertical"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="13dp"
+            android:text="台灯"
+            android:textSize="24dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <SeekBar
+                android:id="@+id/seekBar_thresh"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:max="89"
+                android:thumb="@xml/shape_circle"
+                android:progressDrawable="@xml/seek_bar_gradient"/>
+
+            <TextView
+                android:id="@+id/txt_thresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="亮度：0"
+                android:layout_marginRight="10dp"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divide"/>
+    <!--风扇-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_height="match_parent"
+            android:layout_width="50dp"
+            android:src="@drawable/light"
+            android:layout_gravity="center_vertical"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="13dp"
+            android:layout_gravity="center_vertical"
+            android:text="风扇"
+            android:textSize="24dp"/>
+        <ImageView
+            android:id="@+id/toFan"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/more"/>
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divide"/>
 
 
 </LinearLayout>

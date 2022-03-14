@@ -3,18 +3,40 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_margin="10dp">
+    android:background="@color/white">
+
+    <View
+        android:id="@+id/top_divide_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divide"
+        android:visibility="visible"/>
 
     <TextView
         android:id="@+id/data_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="www"
+        android:textSize="20dp"/>
 
     <TextView
         android:id="@+id/data_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal"
+        android:text="wtf"
+        android:textSize="15dp"/>
+
+    <View
+        android:id="@+id/down_divide_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divide"
+        android:visibility="visible"/>
 
 </LinearLayout>

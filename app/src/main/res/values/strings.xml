@@ -18,4 +18,14 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
     <string name="channeled_id">tangping</string>
+
+    <!--自定义控件属性-->
+    <declare-styleable name="dataLayout">
+        <attr name="data_name" format="string" />
+        <attr name="data_data" format="string" />
+        <attr name="top_divide_line" format="integer" />
+        <attr name="down_divide_line" format="integer" />
+        <attr name="left_divide_line" format="integer" />
+        <attr name="right_divide_line" format="integer" />
+    </declare-styleable>
 </resources>
