@@ -39,7 +39,7 @@ public class wakeUpService extends Service {
     private static final String TAG=wakeUpService.class.getSimpleName();
     // 语音唤醒对象
     private VoiceWakeuper mIvw;
-    private int curThresh=1000;
+    private int curThresh=1500;
 
     //广播发送器
     private LocalBroadcastManager localBroadcastManager;
@@ -190,6 +190,11 @@ public class wakeUpService extends Service {
     public void onDestroy() {
         Log.d(TAG,"onDestroy");
         stopForeground(true);
+        if(mIvw!=null){
+            mIvw.stopListening();
+        }else{
+            Toast.makeText(wakeUpService.this,"对象为空",Toast.LENGTH_SHORT).show();
+        }
         super.onDestroy();
     }
 

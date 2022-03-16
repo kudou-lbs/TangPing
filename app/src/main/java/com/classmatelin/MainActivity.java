@@ -6,6 +6,7 @@ import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -97,13 +98,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         wp = EventManagerFactory.create(this, "wp");
         //注册监听事件
         wp.registerListener(WakeUpListener);//EventListener 中 onEvent方法
-
-        if(isServiceRunning("com.classmatelin.wakeUpService")){
-            Log.d(TAG,"服务早已存在，不作启动");
-        }else{
-            Intent startWakeUpService = new Intent(MainActivity.this,wakeUpService.class);
-            startService(startWakeUpService);
-        }
     }
 
     @Override
@@ -140,6 +134,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 初始化控件
      */
     private void initView() {
+        //判断是否进行了语音唤醒的设置
+        SharedPreferences sharedPreferences=getSharedPreferences("data",MODE_PRIVATE);  //获取/创建共享数据
+        Boolean wakeUpSet=sharedPreferences.getBoolean(String.valueOf(R.string.WAKEUPSET),false);
+        //首次安装应用时启动，未设置语音唤醒数据存储器，开始设置
+        if(!wakeUpSet){
+            SharedPreferences.Editor editor=sharedPreferences.edit();
+            editor.putBoolean(String.valueOf(R.string.WAKEUPSET),true);
+            editor.putBoolean(String.valueOf(R.string.ISWAKINGUP),true);
+            editor.apply();
+
+            //启动服务
+            startWakeUp();
+        }
+        //每次启动时候判断是否设置启动服务，是则启动
+        if(sharedPreferences.getBoolean(String.valueOf(R.string.ISWAKINGUP),false)){
+            startWakeUp();
+        }
+
         //获取按钮
         toMain=(FloatingActionButton)findViewById(R.id.Main);
         microphone = (FloatingActionButton) findViewById(R.id.microphone);  //中间麦克风
@@ -147,6 +159,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //设置点击事件
         toMain.setOnClickListener(this);
         microphone.setOnClickListener(this);
+    }
+
+    //调用以启动服务
+    void startWakeUp(){
+        if(isServiceRunning("com.classmatelin.wakeUpService")){
+            Log.d(TAG,"服务早已存在，不作启动");
+        }else{
+            Intent startWakeUpService = new Intent(MainActivity.this,wakeUpService.class);
+            startService(startWakeUpService);
+        }
     }
 
     /**

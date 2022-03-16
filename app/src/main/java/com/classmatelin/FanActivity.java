@@ -1,6 +1,7 @@
 package com.classmatelin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ import customize.ProtractorView;
 
 public class FanActivity extends AppCompatActivity implements View.OnClickListener{
 
+    Toolbar toolbar;
     ProtractorView fanSpeed;
     TextView fanText;
     ImageView fanSwitch;
@@ -29,7 +31,20 @@ public class FanActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void init(){
-        //一些初始化工作
+        //actionbar
+        toolbar=(Toolbar) findViewById(R.id.fan_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("电风扇");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FanActivity.this.finish();
+            }
+        });
+
+
+        //关于风扇速度控制以及开关的一些初始化工作
         fanSpeed=(ProtractorView) findViewById(R.id.fanSpeed);
         fanText=(TextView) findViewById(R.id.fanSpeedText);
         fanSwitch=(ImageView) findViewById(R.id.fan_switch);

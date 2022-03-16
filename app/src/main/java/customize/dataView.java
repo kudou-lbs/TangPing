@@ -14,7 +14,7 @@ public class dataView extends FrameLayout {
 
     private Context mContext;
     private View contentView;
-    private View topView;
+    //private View topView;
     private View downView;
     //private View leftView;
     //private View rightView;
@@ -39,7 +39,7 @@ public class dataView extends FrameLayout {
         mContext=context;
         LayoutInflater inflater=(LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         contentView=inflater.inflate(R.layout.data,this,true);
-        topView=findViewById(R.id.top_divide_line);
+        //topView=findViewById(R.id.top_divide_line);
         downView=findViewById(R.id.down_divide_line);
         //leftView=findViewById(R.id.left_divide_line);
         //rightView=findViewById(R.id.right_divide_line);
@@ -48,7 +48,7 @@ public class dataView extends FrameLayout {
 
         TypedArray typedArray=mContext.obtainStyledAttributes(attributeSet,R.styleable.dataLayout);
 
-        topView.setVisibility(typedArray.getInt(R.styleable.dataLayout_top_divide_line,DIVIDE_LINE)==1?VISIBLE:GONE);
+        //topView.setVisibility(typedArray.getInt(R.styleable.dataLayout_top_divide_line,DIVIDE_LINE)==1?VISIBLE:GONE);
         downView.setVisibility(typedArray.getInt(R.styleable.dataLayout_down_divide_line,DIVIDE_LINE)==1?VISIBLE:GONE);
         //leftView.setVisibility(typedArray.getInt(R.styleable.dataLayout_left_divide_line,DIVIDE_LINE)==1?VISIBLE:GONE);
         //rightView.setVisibility(typedArray.getInt(R.styleable.dataLayout_right_divide_line,DIVIDE_LINE)==1?VISIBLE:GONE);

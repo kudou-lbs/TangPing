@@ -4,20 +4,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/fan_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"/>
 
     <customize.ProtractorView
         android:id="@+id/fanSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:textProgressColor="#FF00"
-        app:tickProgressColor="#abe6"
+        android:layout_below="@id/fan_toolbar"
+        android:layout_marginTop="40dp"
+        app:angle="0"
         app:enabled="false"
-        app:angle="0"/>
+        app:textProgressColor="#FF00"
+        app:tickProgressColor="#abe6" />
 
     <TextView
         android:id="@+id/fanSpeedText"

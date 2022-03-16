@@ -28,4 +28,7 @@
         <attr name="left_divide_line" format="integer" />
         <attr name="right_divide_line" format="integer" />
     </declare-styleable>
+    <!--SharePreference相关-->
+    <string name="WAKEUPSET">wakeUpSet</string>
+    <string name="ISWAKINGUP">isWakingUp</string>
 </resources>

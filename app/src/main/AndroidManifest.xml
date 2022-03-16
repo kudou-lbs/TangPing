@@ -20,13 +20,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Classmatelin">
+        <activity
+            android:name=".MusicPlayerSelectActivity"
+            android:exported="true" />
+
         <meta-data
             android:name="com.google.android.actions"
             android:resource="@xml/shape_circle" />
 
         <activity
             android:name=".FanActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".UserActivity"
             android:exported="true" />
