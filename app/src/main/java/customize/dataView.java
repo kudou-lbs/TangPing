@@ -56,4 +56,20 @@ public class dataView extends FrameLayout {
         dataData.setText(typedArray.getString(R.styleable.dataLayout_data_data));
 
     }
+
+    public void setDataName(String s) {
+        this.dataName.setText(s);
+    }
+
+    public void setDataData(String s) {
+        this.dataData.setText(s);
+    }
+
+    public TextView getDataName() {
+        return dataName;
+    }
+
+    public TextView getDataData() {
+        return dataData;
+    }
 }

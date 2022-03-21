@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         //判断是否进行了语音唤醒的设置
         SharedPreferences sharedPreferences=getSharedPreferences("data",MODE_PRIVATE);  //获取/创建共享数据
+        //这里的问题是String.valueOf(rid)，返回的id转成的字符串而不是key对应的value本身，但因为都在文件中担任key，所以又能完美的跑起来，缘分，妙不可言，不改了。
         Boolean wakeUpSet=sharedPreferences.getBoolean(String.valueOf(R.string.WAKEUPSET),false);
         //首次安装应用时启动，未设置语音唤醒数据存储器，开始设置
         if(!wakeUpSet){
@@ -150,6 +151,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //每次启动时候判断是否设置启动服务，是则启动
         if(sharedPreferences.getBoolean(String.valueOf(R.string.ISWAKINGUP),false)){
             startWakeUp();
+        }
+
+        //判断是否进行了音乐播放器设置
+        Boolean MPSelected=sharedPreferences.getBoolean(MainActivity.this.getString(R.string.MPSet),false);
+        if(!MPSelected){
+            SharedPreferences.Editor editor=sharedPreferences.edit();
+            editor.putBoolean(MainActivity.this.getString(R.string.MPSet),true);
+            editor.putString(MainActivity.this.getString(R.string.MP),"音乐");
+            editor.apply();
+            //写一下关于默认播放器选择的逻辑，
         }
 
         //获取按钮
@@ -177,6 +188,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initPermission() {
         String permissions[] = {Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_WIFI_STATE,
                 Manifest.permission.INTERNET,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_CONTACTS,
@@ -187,7 +200,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.MODIFY_AUDIO_SETTINGS,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.MEDIA_CONTENT_CONTROL//
+                Manifest.permission.MEDIA_CONTENT_CONTROL,
+                Manifest.permission.FOREGROUND_SERVICE,
+                Manifest.permission.RECORD_AUDIO
         };
 
         try {
@@ -304,7 +319,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(res.contains("播放")){
             //openApp("酷狗音乐");
             if(vAudioManager.isMusicActive()) return;
-            else playMusic();
+            else {
+                SharedPreferences sharedPreferences=getSharedPreferences("data",MODE_PRIVATE);
+                String s=sharedPreferences.getString(MainActivity.this.getString(R.string.MP),"音乐");
+                //Toast.makeText(MainActivity.this,s,Toast.LENGTH_SHORT).show();
+                if(s.contains("酷狗音乐")){openApp("酷狗音乐");}
+                else openApp(s);
+                playMusic();
+            }
         }
         if(res.contains("暂停")){
             pauseMusic();

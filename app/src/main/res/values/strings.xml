@@ -31,4 +31,12 @@
     <!--SharePreference相关-->
     <string name="WAKEUPSET">wakeUpSet</string>
     <string name="ISWAKINGUP">isWakingUp</string>
+    <string name="MPS">MPSelected</string>
+    <string name="MP">musicPlayer</string>
+    <string name="MPSet">musicPlayerInit</string>
+
+    <!--和风天气-->
+    <string name="hf_username">HE2203161050571001</string>
+    <string name="hf_key">d4f30430c9e14bcaab8f4610dec7329b</string>
+    <string name="GuangZhou">CN101280101</string>
 </resources>

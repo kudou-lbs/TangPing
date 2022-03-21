@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,8 @@ public class UserActivity extends AppCompatActivity {
     ImageView wakeUpSwitch;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    LinearLayout user2music;
+    LinearLayout useHelp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,6 @@ public class UserActivity extends AppCompatActivity {
         //根据当前记录数据设置语音唤醒按钮状态
         wakeUpSwitch=(ImageView) findViewById(R.id.wakeup_switch);
         sharedPreferences=getSharedPreferences("data",MODE_PRIVATE);
-
         if(sharedPreferences.getBoolean(String.valueOf(R.string.ISWAKINGUP),false)){
             wakeUpSwitch.setImageResource(R.drawable.switch_on);
             //editor.putBoolean(String.valueOf(R.string.ISWAKINGUP),true).apply();
@@ -58,7 +60,6 @@ public class UserActivity extends AppCompatActivity {
             editor=sharedPreferences.edit();
             editor.putBoolean(String.valueOf(R.string.ISWAKINGUP),false).apply();
         }
-
         wakeUpSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,8 +74,28 @@ public class UserActivity extends AppCompatActivity {
             }
         });
 
+        //设置音乐播放源项点击时间
+        user2music=(LinearLayout) findViewById(R.id.user2music);
+        user2music.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(UserActivity.this,MusicPlayerSelectActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        //使用帮助
+        useHelp=(LinearLayout) findViewById(R.id.user2help);
+        useHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(UserActivity.this,HelpActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
+    //判断服务是否在运行
     private boolean isServiceRunning(final String className){
         ActivityManager activityManager=(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningServiceInfo> info=activityManager.getRunningServices(Integer.MAX_VALUE);

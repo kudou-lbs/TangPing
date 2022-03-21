@@ -107,7 +107,7 @@ public class wakeUpService extends Service {
 //                Intent intent=new Intent(myApplication.wakeUpName);
 //                sendBroadcast(intent);
 
-                Toast.makeText(wakeUpService.this,myApplication.wakeUpName,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(wakeUpService.this,"接收到唤醒命令",Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Toast.makeText(wakeUpService.this,"启动未成功，但确实是识别到了",Toast.LENGTH_SHORT).show();
             }
