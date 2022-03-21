@@ -91,15 +91,6 @@ public class wakeUpService extends Service {
             //PackageManager packageManager=wakeUpService.this.getPackageManager();
 
             try{
-//                String pName=getPackageName();
-//                Intent intent=packageManager.getLaunchIntentForPackage(pName);
-//                startActivity(intent);
-                  //测试：打电话给lmw
-//                Intent intent=new Intent(Intent.ACTION_DIAL);
-//                intent.setData(Uri.parse("tel:"+"13531532683"));
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(intent);
-
                 //2022.03.12：能打开应用，但是只能在点开应用后一段时间内，过了则会只接受信号不进行动作，猜测是安卓系统对App生命周期管理之类照成的，待查。
                 Intent intent=new Intent(wakeUpService.this,MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -107,7 +98,7 @@ public class wakeUpService extends Service {
 //                Intent intent=new Intent(myApplication.wakeUpName);
 //                sendBroadcast(intent);
 
-                Toast.makeText(wakeUpService.this,myApplication.wakeUpName,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(wakeUpService.this,"接收到唤醒命令",Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Toast.makeText(wakeUpService.this,"启动未成功，但确实是识别到了",Toast.LENGTH_SHORT).show();
             }
