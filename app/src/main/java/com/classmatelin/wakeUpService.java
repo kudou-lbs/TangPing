@@ -28,6 +28,7 @@ import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.VoiceWakeuper;
 import com.iflytek.cloud.WakeuperListener;
 import com.iflytek.cloud.WakeuperResult;
+import com.iflytek.cloud.util.ResourceUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,10 +37,12 @@ import java.util.List;
 
 public class wakeUpService extends Service {
 
-    private static final String TAG=wakeUpService.class.getSimpleName();
+    private static final String TAG="WAKEUPSERVICE";
     // 语音唤醒对象
     private VoiceWakeuper mIvw;
-    private int curThresh=1500;
+    private int curThresh=1000;
+    private String keep_alive = "1";
+    private String ivwNetMode = "0";
 
     //广播发送器
     private LocalBroadcastManager localBroadcastManager;
@@ -67,9 +70,9 @@ public class wakeUpService extends Service {
             // 设置唤醒模式
             mIvw.setParameter(SpeechConstant.IVW_SST, "wakeup");
             // 设置持续进行唤醒
-            mIvw.setParameter(SpeechConstant.KEEP_ALIVE, "1");
+            mIvw.setParameter(SpeechConstant.KEEP_ALIVE, keep_alive);
             // 设置闭环优化网络模式
-            mIvw.setParameter(SpeechConstant.IVW_NET_MODE, "0");
+            mIvw.setParameter(SpeechConstant.IVW_NET_MODE, ivwNetMode);
             // 设置唤醒资源路径
             mIvw.setParameter(SpeechConstant.IVW_RES_PATH, getResource());
             // 设置唤醒录音保存路径，保存最近一分钟的音频
@@ -78,6 +81,7 @@ public class wakeUpService extends Service {
             mIvw.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
 
             mIvw.startListening(mWakeuperListener);
+            Log.d(TAG,"开启监听");
         }else{
             Toast.makeText(this,"唤醒未初始化",Toast.LENGTH_SHORT).show();
         }
@@ -89,7 +93,7 @@ public class wakeUpService extends Service {
         @Override
         public void onResult(WakeuperResult result) {
             //PackageManager packageManager=wakeUpService.this.getPackageManager();
-
+            Log.d(TAG,"结果返回");
             try{
                 //2022.03.12：能打开应用，但是只能在点开应用后一段时间内，过了则会只接受信号不进行动作，猜测是安卓系统对App生命周期管理之类照成的，待查。
                 Intent intent=new Intent(wakeUpService.this,MainActivity.class);
@@ -98,7 +102,7 @@ public class wakeUpService extends Service {
 //                Intent intent=new Intent(myApplication.wakeUpName);
 //                sendBroadcast(intent);
 
-                //Toast.makeText(wakeUpService.this,"接收到唤醒命令",Toast.LENGTH_SHORT).show();
+                Toast.makeText(wakeUpService.this,"接收到唤醒命令",Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Toast.makeText(wakeUpService.this,"启动未成功，但确实是识别到了",Toast.LENGTH_SHORT).show();
             }
@@ -131,14 +135,29 @@ public class wakeUpService extends Service {
     };
 
     //资源路径
+//    private String getResource() {
+//        return "fo|/data/app/com.iflytek.mscv5plusdemo-QYT9BJQwwTuHkmc43e8k3g==/base.apk|176964|987983";
+//    }
     private String getResource() {
-        return "fo|/data/app/com.iflytek.mscv5plusdemo-QYT9BJQwwTuHkmc43e8k3g==/base.apk|176964|987983";
+        final String resPath = ResourceUtil.generateResourcePath(wakeUpService.this, ResourceUtil.RESOURCE_TYPE.assets, "ivw/" + getString(R.string.app_id) + ".jet");
+        Log.d(TAG, "resPath: " + resPath);
+        return resPath;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG,"onStartCommand");
 
+        startNotification();
+
+        mIvw = VoiceWakeuper.createWakeuper(this, null);
+        startWakeUp();
+        Toast.makeText(wakeUpService.this,"语音唤醒已打开",Toast.LENGTH_SHORT).show();
+
+        return super.onStartCommand(intent, flags, startId);
+    }
+    //打开通知
+    private void startNotification(){
         NotificationManager notificationManager=(NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
         //构建通知渠道
@@ -169,13 +188,7 @@ public class wakeUpService extends Service {
         notification.defaults=Notification.DEFAULT_SOUND;
         //启动图标
         startForeground(603,notification);
-
-        mIvw = VoiceWakeuper.createWakeuper(this, null);
-        startWakeUp();
-
-        return super.onStartCommand(intent, flags, startId);
     }
-
 
     @Override
     public void onDestroy() {
@@ -183,6 +196,7 @@ public class wakeUpService extends Service {
         stopForeground(true);
         if(mIvw!=null){
             mIvw.stopListening();
+            Toast.makeText(wakeUpService.this,"语音唤醒已关闭",Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(wakeUpService.this,"对象为空",Toast.LENGTH_SHORT).show();
         }

@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
@@ -42,6 +43,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import customize.msgDeal;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     //联系人信息
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public String getNumber(){return number;}
     }
 
-    public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String TAG = "MAINACTIVITY1";
 
     protected TextView txtResult;//识别结果
     protected FloatingActionButton microphone;  //语音按钮
@@ -143,14 +146,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             SharedPreferences.Editor editor=sharedPreferences.edit();
             editor.putBoolean(String.valueOf(R.string.WAKEUPSET),true);
             editor.putBoolean(String.valueOf(R.string.ISWAKINGUP),true);
+            editor.putInt(getResources().getString(R.string.INSIDE_TEMP),0);
+            editor.putInt(getResources().getString(R.string.INSIDE_HUMID),0);
+            editor.putInt(getResources().getString(R.string.FAN_GEAR),0);
+            //还要加上灯的
             editor.apply();
 
             //启动服务
             startWakeUp();
+
         }
         //每次启动时候判断是否设置启动服务，是则启动
         if(sharedPreferences.getBoolean(String.valueOf(R.string.ISWAKINGUP),false)){
             startWakeUp();
+            Log.d(TAG,"打开服务");
         }
 
         //判断是否进行了音乐播放器设置
@@ -271,6 +280,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     };
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //获取温湿度
+                msgDeal.setOrder(getResources().getInteger(R.integer.GET_TempAndHumid));
+                msgDeal.onReceive(MainActivity.this);
+                msgDeal.onRequest(MainActivity.this);
+                //灯状态
+                msgDeal.setOrder(getResources().getInteger(R.integer.GET_LightState));
+                msgDeal.onReceive(MainActivity.this);
+                msgDeal.onRequest(MainActivity.this);
+                //风扇状态
+                msgDeal.setOrder(getResources().getInteger(R.integer.GET_FanAngle));
+                msgDeal.onReceive(MainActivity.this);
+                msgDeal.onRequest(MainActivity.this);
+            }
+        }).start();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         //发送取消事件
@@ -289,6 +320,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             isMessage=false;
             msg_number=null;
             msg_name=null;
+        }
+        if(result.contains("灯")){
+            SharedPreferences sharedPreferences=getSharedPreferences("data",MODE_PRIVATE);
+            if(result.contains("开")){
+                msgDeal.setOrder(3);
+                msgDeal.onRequest(MainActivity.this);
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.putBoolean(getResources().getString(R.string.LIGHT),true);
+                editor.apply();
+            }else if(result.contains("关")){
+                msgDeal.setOrder(4);
+                msgDeal.onRequest(MainActivity.this);
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.putBoolean(getResources().getString(R.string.LIGHT),false);
+                editor.apply();
+            }
+            return;
         }
         if(result.contains("打开")){
             String appName=result.substring(result.indexOf("开")+1,result.indexOf("。"));

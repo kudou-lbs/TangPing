@@ -3,7 +3,12 @@ package com.classmatelin;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import customize.ProtractorView;
+import customize.msgDeal;
 
 public class FanActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -19,8 +25,41 @@ public class FanActivity extends AppCompatActivity implements View.OnClickListen
     TextView fanText;
     ImageView fanSwitch;
 
-    //当前风速
+    //当前风速 & 档位
     int currentAngle;
+    int GEAR=0;
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            SharedPreferences sharedPreferences=getSharedPreferences("data",MODE_PRIVATE);
+            ProtractorView fanSpeed=(ProtractorView) findViewById(R.id.fanSpeed);
+            TextView fanText=(TextView) findViewById(R.id.fanSpeedText);
+            ImageView fanSwitch=(ImageView) findViewById(R.id.fan_switch);
+            switch (msg.what){
+                case 1:
+                    GEAR=sharedPreferences.getInt(getResources().getString(R.string.FAN_GEAR),0);
+
+                    if(GEAR==0){
+                        fanSpeed.setEnabled(false);
+                        fanSwitch.setImageResource(R.drawable.switch_off);
+                        currentAngle=0;
+                        setFanSpeed();
+                        fanText.setText("风速："+currentAngle);
+                    }else{
+                        fanSpeed.setEnabled(true);
+                        fanSwitch.setImageResource(R.drawable.switch_on);
+                        currentAngle=210-GEAR*60;
+                        setFanSpeed();
+                        fanText.setText("风速："+currentAngle);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +116,31 @@ public class FanActivity extends AppCompatActivity implements View.OnClickListen
 
             @Override
             public void onStopTrackingTouch(ProtractorView protractorView) {
+                Log.d("FAN_Stop",String.valueOf(currentAngle));
+                if(currentAngle>=120)GEAR=1;
+                else if(currentAngle>=60) GEAR=2;
+                else if(currentAngle>=0)GEAR=3;
+                sendMsg(GEAR);
             }
         });
 
         fanSwitch.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                msgDeal.setOrder(getResources().getInteger(R.integer.GET_FanAngle));
+                msgDeal.onReceive(FanActivity.this);
+                msgDeal.onRequest(FanActivity.this);
+                Message message=new Message();
+                message.what=1;
+                handler.sendMessage(message);
+            }
+        }).start();
     }
 
     @Override
@@ -91,15 +151,19 @@ public class FanActivity extends AppCompatActivity implements View.OnClickListen
                     fanSwitch.setImageResource(R.drawable.switch_on);
                     fanSpeed.setEnabled(true);
                     currentAngle=180;
+                    GEAR=1;
                     setFanSpeed();
                     fanText.setText("风速："+currentAngle);
                 }else{
                     fanSwitch.setImageResource(R.drawable.switch_off);
                     fanSpeed.setEnabled(false);
                     currentAngle=0;
+                    GEAR=0;
                     setFanSpeed();
                     fanText.setText("风速："+currentAngle);
                 }
+                sendMsg(GEAR);
+                break;
             default:
                 break;
         }
@@ -117,6 +181,11 @@ public class FanActivity extends AppCompatActivity implements View.OnClickListen
 
     private int getCurrentAngle(){
         return currentAngle;
+    }
+
+    private void sendMsg(int gear){
+        msgDeal.setOrder(getResources().getInteger(R.integer.ModifyFanAngle));
+        msgDeal.onFanModify(gear);
     }
 
 }
