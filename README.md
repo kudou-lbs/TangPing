@@ -6,6 +6,14 @@ This is not a really readme but just a instructio of the tangping app.
 3. 启动软件默认启动语音唤醒功能，下拉通知栏看到躺屏的“语音唤醒正在后台运行中“即可进行语音唤醒；
 4. 打开软件下方会出现三个按钮，点击中间按钮并开始说话即可进行语音识别，如说出“打开酷狗”便会打开酷狗音乐；
 
+视频演示链接：
+
+温湿度获取：https://www.bilibili.com/video/BV1Y94y1d7o3?spm_id_from=333.999.0.0
+
+灯和风扇调节：https://www.bilibili.com/video/BV12r4y1n7ce?spm_id_from=333.999.0.0
+
+语音控制：https://www.bilibili.com/video/BV1g44y157P7?spm_id_from=333.999.0.0
+
 ① MainActivity
 点击左边按钮即可进入主操作界面，点击中间按钮便会进行语音识别，说完后自动停止并将识别结果返回，同时响应命令，如说出"打开酷狗音乐"即可打开酷狗app；下拉通知栏可看到躺屏语音唤醒正在后台运行中
 
